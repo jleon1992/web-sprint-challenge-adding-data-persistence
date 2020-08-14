@@ -7,7 +7,16 @@ module.exports = {
     getResources,
     addResource,
     getTasks,
-    addTasks
+    addTasks,
+    updateProject,
+    updateResource,
+    updateTask,
+    deleteProject,
+    deleteResource,
+    deleteTask,
+    findProjectById,
+    findTaskById,
+    findResourceById
     // getInstructions
 }
 
@@ -37,14 +46,62 @@ function addTasks(task){
     return db('tasks')
         .insert(task)
 }
-// function getShoppingList(recipe_id){
-//     return db('recipes_ingredients as ri')        
-//         .join('ingredients', 'ingredients.id', 'ri.ingredients_id')
-//         .select('ingredients.name', 'ri.quantity')
-//         .where('ri.recipe_id', recipe_id)
-// }
 
-// function getInstructions(recipe_id){
-//     return db().select('instructions').from('instructions as i')
-//         .where('i.recipes_id', recipe_id)
-// }
+function updateProject(changes, id){
+    return db('project')
+        .where({id})
+        .update(changes)
+}
+
+function updateResource(changes, id){
+    return db('resource')
+        .where({id})
+        .update(changes)
+}
+
+function updateTask(changes, id){
+    return db('tasks')
+        .where({id})
+        .update(changes)
+}
+
+
+
+function deleteProject(id){
+    return db('project')
+    .where('id', id)
+    .del()
+}
+
+function deleteTask(id){
+    return db('tasks')
+    .where('id', id)
+    .del()
+}
+
+function deleteResource(id){
+    return db('resource')
+    .where('id', id)
+    .del()
+}
+
+function findProjectById(id) {
+    return db('project')
+      .where({id})
+      .first()
+
+}
+
+function findTaskById(id) {
+    return db('resource')
+      .where({id})
+      .first()
+
+}
+
+function findResourceById(id) {
+    return db('resource')
+      .where({id})
+      .first()
+
+}

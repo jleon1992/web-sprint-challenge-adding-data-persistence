@@ -36,6 +36,80 @@ server.get('/api/tasks', (req, res) => {
         })
 })
 
+server.get('/api/projects/:id', (req, res) => {
+  const id = req.params.id
+  Projects.findProjectById(id)
+      .then(project => {
+          res.status(200).json(project)
+      })
+})
+
+server.get('/api/tasks/:id', (req, res) => {
+  const id = req.params.id
+  Projects.findTaskById(id)
+      .then(task => {
+          res.status(200).json(task)
+      })
+})
+
+server.get('/api/resources/:id', (req, res) => {
+  const id = req.params.id
+  Projects.findResourceById(id)
+      .then(resource => {
+          res.status(200).json(resource)
+      })
+})
+
+
+
+server.delete('/api/projects/:id', (req, res) => {
+  const { id } = req.params;
+
+  Projects.deleteProject(id)
+  .then(deleted => {
+    if (deleted) {
+      res.json({ removed: deleted });
+    } else {
+      res.status(404).json({ message: 'Could not find project with given id' });
+    }
+  })
+  .catch(err => {
+    res.status(500).json({ message: 'Failed to delete project' });
+  });
+});
+
+server.delete('/api/tasks/:id', (req, res) => {
+  const { id } = req.params;
+
+  Projects.deleteTask(id)
+  .then(deleted => {
+    if (deleted) {
+      res.json({ removed: deleted });
+    } else {
+      res.status(404).json({ message: 'Could not find task with given id' });
+    }
+  })
+  .catch(err => {
+    res.status(500).json({ message: 'Failed to delete task' });
+  });
+});
+
+server.delete('/api/resources/:id', (req, res) => {
+  const { id } = req.params;
+
+  Projects.deleteResource(id)
+  .then(deleted => {
+    if (deleted) {
+      res.json({ removed: deleted });
+    } else {
+      res.status(404).json({ message: 'Could not find resource with given id' });
+    }
+  })
+  .catch(err => {
+    res.status(500).json({ message: 'Failed to delete resource' });
+  });
+});
+
 server.post('/api/projects', (req, res) => {
     const project = req.body
     Projects.addProject(project)
@@ -68,4 +142,64 @@ server.post('/api/resources', (req, res) => {
     res.status(500).json({ message: 'Failed to create new resource' });
   });
 })
+
+server.put('/api/projects/:id', (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+
+  Projects.updateProject(id)
+  .then(project => {
+    if (project) {
+      projects.updateProject(changes, id)
+      .then(updatedProject => {
+        res.json(updatedProject);
+      });
+    } else {
+      res.status(404).json({ message: 'Could not find project with given id' });
+    }
+  })
+  .catch (err => {
+    res.status(500).json({ message: 'Failed to update project' });
+  });
+});
+
+server.put('/api/tasks/:id', (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+
+  Projects.findById(id)
+  .then(tasks => {
+    if (tasks) {
+      Projects.updateTask(changes, id)
+      .then(updatedTask => {
+        res.json(updatedTask);
+      });
+    } else {
+      res.status(404).json({ message: 'Could not find task with given id' });
+    }
+  })
+  .catch (err => {
+    res.status(500).json({ message: 'Failed to update task' });
+  });
+});
+
+server.put('/api/resources/:id', (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+
+  Projects.findById(id)
+  .then(resource => {
+    if (resource) {
+      Projects.updateResource(changes, id)
+      .then(updatedResource => {
+        res.json(updatedResource);
+      });
+    } else {
+      res.status(404).json({ message: 'Could not find resource with given id' });
+    }
+  })
+  .catch (err => {
+    res.status(500).json({ message: 'Failed to update resource' });
+  });
+});
 module.exports = server;
