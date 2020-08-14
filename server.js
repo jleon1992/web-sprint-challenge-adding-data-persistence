@@ -60,6 +60,29 @@ server.get('/api/resources/:id', (req, res) => {
       })
 })
 
+server.get('/api/projects/:id/resources', (req, res) => {
+  const id = req.params.id
+  Projects.getProjectResources(id)
+    .then(resources => {
+      res.status(200).json(resources)
+    })
+})
+
+server.get('/api/projects/:id/tasks', (req, res) => {
+  const id = req.params.id
+  Projects.getProjectTasks(id)
+    .then(tasks => {
+      res.status(200).json(tasks)
+    })
+})
+
+server.get('/api/resources/:id/projects', (req, res) => {
+  const id = req.params.id
+  Projects.getResourceProjetcs(id)
+    .then(projects => {
+      res.status(200).json(projects)
+    })
+})
 
 
 server.delete('/api/projects/:id', (req, res) => {

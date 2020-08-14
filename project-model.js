@@ -16,7 +16,10 @@ module.exports = {
     deleteTask,
     findProjectById,
     findTaskById,
-    findResourceById
+    findResourceById,
+    getProjectResources,
+    getProjectTasks,
+    getResourceProjetcs
     // getInstructions
 }
 
@@ -65,8 +68,6 @@ function updateTask(changes, id){
         .update(changes)
 }
 
-
-
 function deleteProject(id){
     return db('project')
     .where('id', id)
@@ -104,4 +105,23 @@ function findResourceById(id) {
       .where({id})
       .first()
 
+}
+
+function getProjectResources(project_id){
+    return db().select('r.name').from('resources as r')
+        .join('projects_resources as pr', 'r.id', 'pr.resource_id')
+        .where('pr.project_id', project_id)
+}
+
+function getProjectTasks(project_id){
+    return db().select('t.name').from('tasks as t')
+    // .join('projects_resources as pr', 'r.id', 'pr.resource_id')
+    .where('t.project_id', project_id)
+}
+
+function getResourceProjetcs(resource_id){
+    return db().select('p.name').from('project as p')
+    .join('projects_resources as pr', 'p.id', 'pr.project_id')
+    .join('resource as r', 'r.id', 'pr.resource_id')
+    .where('pr.project_id', resource_id)
 }
